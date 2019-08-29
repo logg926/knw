@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Upload
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <file-pond #myPond 
+    [options]="pondOptions" 
+    [files]="pondFiles"
+    (oninit)="pondHandleInit()"
+    (onaddfile)="pondHandleAddFile($event)"
+    (onremovefile)="pondHandleRemoveFile($event)"
+    >
+
+</file-pond>
+  <ion-card *ngIf="imgshowing!=''">
+    <img [src]="imgshowing" />
+  </ion-card>
+</ion-content>
