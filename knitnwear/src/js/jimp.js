@@ -36609,7 +36609,7 @@ function dither(cb) {
 
 
 
-function dither3(options,cb) {
+function dither3(palette,outputColors,cb) {
   // options.brightness 
   // options.contrast 
   // options.threshhold 
@@ -36617,7 +36617,7 @@ function dither3(options,cb) {
   // options.tar_height
   // options.whratio
   
-  console.log(options)
+  console.log(outputColors)
 
   const floydMatrix = [7,3,5,1]
   const floydSteinberg = [
@@ -36626,7 +36626,6 @@ function dither3(options,cb) {
     [0, 1,  5 / 16],
     [1, 1,  1 / 16]
   ]
-  var palette = [[0,0,0],[0xff,0xff,0xff]]
   
   var bitmapclone
   var rgb565Matrix = [1, 9, 3, 11, 13, 5, 15, 7, 4, 12, 2, 10, 16, 8, 14, 6];
@@ -36650,7 +36649,7 @@ function dither3(options,cb) {
       }, [1000000, -1])
       const result = the_palette[minerr[1]]
       const error = errorarray[minerr[1]]
-      return { "result": result, "error": error }
+      return { "result": result, "error": error ,"index" :minerr[1]}
     }
     // if (x==0&&y==0){
     // bitmapclone[idx] =  bitmapclone[idx]>255?255:bitmapclone[idx]<0?0:bitmapclone[idx]
@@ -36659,9 +36658,12 @@ function dither3(options,cb) {
 
     var oldpixel = bitmapclone.slice(idx,idx+3)
     var closest = find_closest_color(oldpixel,palette)
-    bitmapclone[idx] = closest.result[0]
-    bitmapclone[idx + 1] = closest.result[1]
-    bitmapclone[idx + 2] = closest.result[2]
+    bitmapclone[idx] = outputColors[closest.index][0]
+    bitmapclone[idx + 1] = outputColors[closest.index][1]
+    bitmapclone[idx + 2] = outputColors[closest.index][2]
+    // bitmapclone[idx] = closest.result[0]
+    // bitmapclone[idx + 1] = closest.result[1]
+    // bitmapclone[idx + 2] = closest.result[2]
     bitmapclone[idx + 3] = 0xff;
     
     const diff_map = floydSteinberg

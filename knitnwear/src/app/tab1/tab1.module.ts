@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Tab1Page } from './tab1.page';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import { ColorPickerModule } from 'ngx-color-picker';
 registerPlugin(FilePondPluginFileValidateType);
 
 @NgModule({
@@ -14,7 +15,11 @@ registerPlugin(FilePondPluginFileValidateType);
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: Tab1Page }]),
-    FilePondModule // add filepond module here
+    FilePondModule, // add filepond module here
+    // ColorChromeModule, // added to imports
+    // ColorCircleModule
+
+    ColorPickerModule,
   ],
   declarations: [Tab1Page]
 })

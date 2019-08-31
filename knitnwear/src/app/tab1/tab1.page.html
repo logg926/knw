@@ -7,17 +7,119 @@
 </ion-header>
 
 <ion-content>
+  <ion-card>
 
-  <file-pond #myPond 
-    [options]="pondOptions" 
-    [files]="pondFiles"
-    (oninit)="pondHandleInit()"
-    (onaddfile)="pondHandleAddFile($event)"
-    (onremovefile)="pondHandleRemoveFile($event)"
-    >
+    <ion-card-content>
+      <file-pond #myPond [options]="pondOptions" [files]="pondFiles" (oninit)="pondHandleInit()"
+        (onaddfile)="pondHandleAddFile($event)" (onremovefile)="pondHandleRemoveFile($event)">
+      </file-pond>
+    </ion-card-content>
 
-</file-pond>
-  <ion-card *ngIf="imgshowing!=''">
+  </ion-card>
+
+
+  <!-- <ion-card *ngIf="imgshowing!=''"> -->
+      <ion-card >
+
     <img [src]="imgshowing" />
+    <ion-card-header>
+      Dithering Option
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-list>
+        
+        <ion-item>
+ 
+            <ion-label class="font-weight-light">GreyScale</ion-label>
+          <ion-toggle [(ngModel)]="greyscale" (ionChange)="changePhoto()"></ion-toggle>
+        </ion-item>
+
+
+        <ion-item>
+          <ion-range min="-100" max="100" pin color="secondary" (ionBlur)="changePhoto()" [(ngModel)]="contrast">
+            <ion-icon slot="start" size="small" name="contrast"></ion-icon>
+            <ion-icon slot="end" name="contrast"></ion-icon>
+            <ion-button slot="end">
+
+                <ion-icon  name="save"></ion-icon>
+            </ion-button>
+          </ion-range>
+        </ion-item>
+        <ion-item>
+          <ion-range min="-100" max="100" pin color="secondary" (ionBlur)="changePhoto()"
+            [(ngModel)]="brightness">
+            <ion-icon size="small" slot="start" name="sunny"></ion-icon>
+            <ion-icon slot="end" name="sunny"></ion-icon>
+            <ion-button slot="end">
+            <ion-icon  name="save"></ion-icon>
+          </ion-button>
+          </ion-range>
+        </ion-item>
+
+      <ion-item>
+
+
+                 <ion-label>
+                    Use Generated Palette
+                 </ion-label> 
+                  <!-- <ion-label>Colors chosen by median-cut algorithm</ion-label> -->
+
+          <ion-toggle [(ngModel)]="autogeneratepalette" ></ion-toggle>
+             
+            </ion-item>
+      <ion-item>
+
+          <ion-grid>
+            <ion-row align-items-center>
+                <ion-col align-self-center>
+                <span class="dot"
+                [style.background-color]="arrayColors['color1']"
+                (click)="showcp=true;selectedColor='color1'"
+                ></span>
+              </ion-col><ion-col align-self-center>
+                <span class="dot"
+                [style.background-color]="arrayColors['color2']"
+                (click)="showcp=true;selectedColor='color2'"
+                ></span>
+                </ion-col><ion-col align-self-center>
+                <span class="dot"
+                [style.background-color]="arrayColors['color3']"
+                (click)="showcp=true;selectedColor='color3'"
+                ></span>
+              </ion-col>
+            <ion-col *ngIf="!autogeneratepalette">
+                <ion-button (click)="changePhoto();">
+                    Apply
+                  </ion-button>
+
+                </ion-col>
+            </ion-row>
+
+          </ion-grid>
+
+        </ion-item>
+
+      <ion-item *ngIf="showcp&&!autogeneratepalette">
+          <ion-row >
+            <span [style.background]="arrayColors[selectedColor]"
+      [cpToggle]="true"
+      [cpDialogDisplay]="'inline'"
+      [cpCancelButton]="true"
+      [(colorPicker)]="arrayColors[selectedColor]"></span>
+      
+    </ion-row>
+
+  </ion-item>
+      </ion-list>
+
+
+     
+      
+
+    </ion-card-content>
+    
   </ion-card>
 </ion-content>
+
+<!-- <ion-loading-controller></ion-loading-controller> -->
