@@ -17,7 +17,7 @@ export class Tab1Page implements OnInit {
   ngOnInit(){
     this.imgshowing = ""
     this.contrast = 0;
-    this.greyscale = false;
+    this.greyscale = true;
     this.brightness = 0;
     this.picloading = false
     this.uploadpicloading = false
