@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Imgstore } from 'src/service/imgstore.service';
 
 @Component({
   selector: 'app-tabs',
@@ -7,6 +8,9 @@ import { Component } from '@angular/core';
 })
 export class TabsPage {
 
-  constructor() {}
+  constructor(
+
+    public imgstore: Imgstore, 
+  ) {}
 
 }

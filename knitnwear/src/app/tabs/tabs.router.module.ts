@@ -37,26 +37,26 @@ const routes: Routes = [
           }
         ]
       },
-      {
-        path: 'tab4',
-        children: [
-          {
-            path: '',
-            loadChildren: () =>
-              import('../tab4/tab4.module').then(m => m.Tab4PageModule)
-          }
-        ]
-      },
+      // {
+      //   path: 'tab4',
+      //   children: [
+      //     {
+      //       path: '',
+      //       loadChildren: () =>
+      //         import('../tab4/tab4.module').then(m => m.Tab4PageModule)
+      //     }
+      //   ]
+      // },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: 'withsize/210/233/1.5/tab1',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: 'withsize/210/233/1.5/tab1',
     pathMatch: 'full'
   }
 ];

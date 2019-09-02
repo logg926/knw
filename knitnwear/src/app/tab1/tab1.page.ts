@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 declare var Jimp;
 declare var RgbQuant;
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-tab1',
@@ -23,10 +24,12 @@ export class Tab1Page implements OnInit {
     this.showingloader =false;
     this.arrayColors={'color1':'#ffffff','color2':'#7f7f7f','color3':'#000'}
     this.autogeneratepalette= true
+    this.imgshowing = ""
+    this.imgupload = ""
   }
   constructor(
     public imgstore: Imgstore, 
-    private router: Router,
+    public router: Router,
     public loadingController: LoadingController) {
   }
   arrayColors;
@@ -64,7 +67,7 @@ export class Tab1Page implements OnInit {
   uploadpicloading :boolean;
   loader:Promise<void | HTMLIonLoadingElement>;
   showingloader:boolean;
-
+  selectedColor:string;
   showLoading() {
     if (!this.showingloader){
       this.showingloader = true;
@@ -129,39 +132,42 @@ export class Tab1Page implements OnInit {
       // do median cut here step1img store on this.arrayColors
       if (this.autogeneratepalette){
 
-        step1img.clone().getBase64(Jimp.MIME_BMP, (err, src) => {
-          //src is the dataurl of the transformed image
-          // const newimage = new Image(step1img.bitmap.width, step1img.bitmap.height)
-          var newimage = new Image()
-          newimage.src = src
-          var can = document.createElement("canvas");
-          can.width = step1img.bitmap.width;
-          can.height = step1img.bitmap.height;
-          var ctx = can.getContext("2d");
-          ctx.drawImage(newimage,0,0);
+        // step1img.clone().getBase64(Jimp.MIME_BMP, (err, src) => {
+        //   //src is the dataurl of the transformed image
+        //   // const newimage = new Image(step1img.bitmap.width, step1img.bitmap.height)
+        //   var newimage = new Image()
+        //   newimage.src = src
+        //   var can = document.createElement("canvas");
+        //   can.width = step1img.bitmap.width;
+        //   can.height = step1img.bitmap.height;
+        //   var ctx = can.getContext("2d");
+        //   ctx.drawImage(newimage,0,0);
           
-          console.log(ctx)
-          var opts = {
-            colors: 256,             // desired palette size
-            method: 2,               // histogram method, 2: min-population threshold within subregions; 1: global top-population
-            boxSize: [64,64],        // subregion dims (if method = 2)
-            boxPxls: 2,              // min-population threshold (if method = 2)
-            initColors: 4096,        // # of top-occurring colors  to start with (if method = 1)
-            minHueCols: 0,           // # of colors per hue group to evaluate regardless of counts, to retain low-count hues
-            dithKern: null,          // dithering kernel name, see available kernels in docs below
-            dithDelta: 0,            // dithering threshhold (0-1) e.g: 0.05 will not dither colors with <= 5% difference
-            dithSerp: false,         // enable serpentine pattern dithering
-            palette: [],             // a predefined palette to start with in r,g,b tuple format: [[r,g,b],[r,g,b]...]
-            reIndex: false,          // affects predefined palettes only. if true, allows compacting of sparsed palette once target palette size is reached. also enables palette sorting.
-            useCache: true,          // enables caching for perf usually, but can reduce perf in some cases, like pre-def palettes
-            cacheFreq: 10,           // min color occurance count needed to qualify for caching
-            colorDist: "euclidean",  // method used to determine color distance, can also be "manhattan"
-        };
-         console.log(newimage)
-        var q = new RgbQuant(opts);
+        //   console.log(ctx)
+        //   var opts = {
+        //     colors: 256,             // desired palette size
+        //     method: 2,               // histogram method, 2: min-population threshold within subregions; 1: global top-population
+        //     boxSize: [64,64],        // subregion dims (if method = 2)
+        //     boxPxls: 2,              // min-population threshold (if method = 2)
+        //     initColors: 4096,        // # of top-occurring colors  to start with (if method = 1)
+        //     minHueCols: 0,           // # of colors per hue group to evaluate regardless of counts, to retain low-count hues
+        //     dithKern: null,          // dithering kernel name, see available kernels in docs below
+        //     dithDelta: 0,            // dithering threshhold (0-1) e.g: 0.05 will not dither colors with <= 5% difference
+        //     dithSerp: false,         // enable serpentine pattern dithering
+        //     palette: [],             // a predefined palette to start with in r,g,b tuple format: [[r,g,b],[r,g,b]...]
+        //     reIndex: false,          // affects predefined palettes only. if true, allows compacting of sparsed palette once target palette size is reached. also enables palette sorting.
+        //     useCache: true,          // enables caching for perf usually, but can reduce perf in some cases, like pre-def palettes
+        //     cacheFreq: 10,           // min color occurance count needed to qualify for caching
+        //     colorDist: "euclidean",  // method used to determine color distance, can also be "manhattan"
+        // };
+        //  console.log(newimage)
+        // var q = new RgbQuant(opts);
 
-        console.log(q.reduce(ctx))
-        })
+        // console.log(q.reduce(ctx))
+        // })
+        this.arrayColors.color1 = "#FFFFFF"
+        this.arrayColors.color2 = '#7F7F7F'
+        this.arrayColors.color3 = "#000000"
 
       }
       const palette = [this.arrayColors.color1,this.arrayColors.color2,this.arrayColors.color3].map((hex)=>hexToRgb(hex))
@@ -172,6 +178,8 @@ export class Tab1Page implements OnInit {
         .contain(this.tar_width,this.tar_height)
         .dither3(palette,knitcolors)              // set greyscale
       ditheredimg.clone().getBase64(Jimp.MIME_BMP, (err, src) => {
+
+        this.imgstore.setcur(src)
           //src is the dataurl of the transformed image
           this.imgupload = src
           this.uploadpicloading =  false
@@ -180,6 +188,7 @@ export class Tab1Page implements OnInit {
         .getBase64(Jimp.MIME_PNG, (err, src) => {
           //src is the dataurl of the transformed image
 
+          this.imgstore.setusrsee(src)
           this.imgshowing = src;
           this.picloading = false;
           this.hideLoading()
@@ -203,7 +212,7 @@ export class Tab1Page implements OnInit {
       
       //fr.result is the dataurl of the original image
       this.originalimage = <string>fr.result
-      setTimeout(()=>this.updatePhoto(<string>fr.result),200)
+      setTimeout(()=>this.updatePhoto(<string>fr.result),700)
       // console.log(this.imgstore.imgurl);
     }, false);
   }
@@ -213,6 +222,17 @@ export class Tab1Page implements OnInit {
 
   }
   closedialog(dialogid){
-    console.log(dialogid)
+    // console.log(dialogid)
   }
+  // done(){
+  //   if(!this.picloading && !(this.imgupload == "")&& !(this.imgshowing == "")&&!this.showingloader){
+  //     console.log("go to page 2")
+  //     console.log(this.router.url.slice(0, -1)+"2")
+  //     this.location.go(this.router.url.slice(0, -1)+"2")
+
+  //   }else{
+  //     console.log("error")
+
+  //   }
+  // }
 }

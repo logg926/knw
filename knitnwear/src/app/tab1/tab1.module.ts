@@ -6,7 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { Tab1Page } from './tab1.page';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+// import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { ColorPickerModule } from 'ngx-color-picker';
+// import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+// import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 registerPlugin(FilePondPluginFileValidateType);
 
 @NgModule({

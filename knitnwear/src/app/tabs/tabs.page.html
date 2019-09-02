@@ -6,20 +6,18 @@
       <ion-label>Upload</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="tab2">
+    <ion-tab-button tab="tab2" [disabled]='imgstore.imgcur==""' >
       <!-- <ion-icon name="apps"></ion-icon> -->
-      <ion-label>Modify</ion-label>
+      <ion-label>Email</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="tab3">
-      <!-- <ion-icon name="send"></ion-icon> -->
-      <ion-label>Export</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="tab4">
-      <!-- <ion-icon name="final"></ion-icon> -->
+    <ion-tab-button tab="tab3" [disabled]="imgstore.email==''">
       <ion-label>Done</ion-label>
     </ion-tab-button>
+<!-- 
+    <ion-tab-button tab="tab4">
+      <ion-label>Done</ion-label>
+    </ion-tab-button> -->
   </ion-tab-bar>
 
 </ion-tabs>

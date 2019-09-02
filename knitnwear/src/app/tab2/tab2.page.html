@@ -1,11 +1,28 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Modify
+      Email
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-card>
+    <ion-card-header>
+      If you confirm you want to knit the pattern below, please enter your Email Address below. Otherwise, Please modify the picture until you confirm:
+    </ion-card-header>
+<img [src]="imgstore.imgusrsee">
+    <ion-card-content>
+      
+<ion-input placeholder="Enter Email" [(ngModel)]="email" ></ion-input>
+
+    </ion-card-content>
+    <ion-card-content>
+      <ion-button expand="block" (click)="submit()">
+        Done
+      </ion-button>
+
+    </ion-card-content>
+  </ion-card>
   
 </ion-content>
