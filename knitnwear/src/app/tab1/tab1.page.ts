@@ -97,6 +97,10 @@ export class Tab1Page implements OnInit {
     this.uploadpicloading = true
     
     setTimeout(()=>{this.imgstore.setimgurl(originalimage).then((image) => {
+
+      this.tar_width = 216
+      this.tar_height =194
+      this.whratio = 0.862
       function hexToRgb(hex:string) {
         // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
         var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -172,6 +176,7 @@ export class Tab1Page implements OnInit {
       }
       const palette = [this.arrayColors.color1,this.arrayColors.color2,this.arrayColors.color3].map((hex)=>hexToRgb(hex))
       // console.log (palette)
+      
 
       var ditheredimg = step1img
         .background(backgroundcolor)

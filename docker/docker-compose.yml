@@ -1,0 +1,47 @@
+version: "3"
+services:
+  web:
+    image: logg926/why
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:3000"
+    networks:
+      - webnet
+    volumes: 
+      - imgvol:/usr/src/app/upload
+
+  visualizer:
+    image: logg926/autogen_4color
+    ports:
+      - "2222:80"
+    volumes:
+      - imgvol:/auto_app/static/img
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+    
+  ftp:
+    image: atmoz/sftp
+    ports:
+        - "8080:22"
+    command: autogen:autogen!QAZ:::upload
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+    volumes:
+        - imgvol:/home/autogen/upload/
+
+networks:
+  webnet:
+
+volumes:
+  imgvol:

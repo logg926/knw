@@ -1,0 +1,24 @@
+docker run --restart=always redis
+
+
+version: "3"
+services:
+  web:
+    image: logg926/node-web-app
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:80"
+
+  ftp:
+    image: atmoz/sftp
+    ports:
+        - "8080:22"
+    command: autogen:autogen!QAZ:::upload
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        

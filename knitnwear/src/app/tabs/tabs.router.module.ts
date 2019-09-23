@@ -49,14 +49,14 @@ const routes: Routes = [
       // },
       {
         path: '',
-        redirectTo: 'withsize/210/233/1.5/tab1',
+        redirectTo: 'withsize/216/194/1.105/tab1',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: 'withsize/210/233/1.5/tab1',
+    redirectTo: 'withsize/216/194/1.105/tab1',
     pathMatch: 'full'
   }
 ];

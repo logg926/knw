@@ -1,0 +1,41 @@
+version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    # image: logg926/autogen_3color
+    # deploy:
+    #   replicas: 1
+    #   restart_policy:
+    #     condition: on-failure
+    # ports:
+    #   - "80:80"
+    # networks:
+    #   - webnet
+    # volumes: 
+    #   - imgvol:/auto_app/static/export
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "2222:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+  ftp:
+    image: atmoz/sftp
+    ports:
+        - "8080:22"
+    command: autogen:autogen!QAZ:1001
+    networks:
+      - webnet
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        
+networks:
+  webnet:

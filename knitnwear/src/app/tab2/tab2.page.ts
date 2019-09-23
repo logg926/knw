@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Imgstore } from 'src/service/imgstore.service';
 import { ToastController, LoadingController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-tab2',
@@ -17,7 +18,8 @@ export class Tab2Page implements OnInit{
 
     public loadingController: LoadingController,
     public imgstore: Imgstore,
-    public router: Router
+    public router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit(){
@@ -60,6 +62,14 @@ export class Tab2Page implements OnInit{
       });
     }
   }
+  dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
 
   hideLoading(){
     this.loader.then(()=>{
@@ -76,18 +86,53 @@ export class Tab2Page implements OnInit{
     })
   }
 
+  private extractData(res: Response) {
+    let body = res;
+    return body || { };
+  }
+
   submit(){
     if (!this.validateEmail(this.email)){
       this.showToaster("Invalid Email Format")
     }else{
+
+      this.imgstore.setemail(this.email)
       this.showLoading()
       // console.log ("start uploading")
       // //upload 
       // console.log(this.imgstore.imgcur)
       // console.log("upload finish")
-      this.imgstore.setemail(this.email)
+
+
+      const endpoint = "http://www.knitnwear.com:2222/";
+      // const httpOptions = {
+      //   headers: new HttpHeaders({
+      //   'Content-Type':  'multipart/form-data'
+      //   })
+      //   };
+      // const content = {"img":this.imgstore.imgcur,"email":this.imgstore.email}
+      const name = this.imgstore.email+"!!!"+Date.now().toString()+".bmp";
+    var blob = this.dataURLtoBlob(this.imgstore.imgcur);
+    var fd = new FormData();
+    fd.append("file", blob, name);
+
+      // console.log(content)
+      this.http.post(endpoint, fd,
+        {responseType: 'text'}).subscribe(
+        // this.http.post(endpoint, fd, httpOptions).subscribe(
+      (res)=>{
+          // console.log(res)
+
       this.hideLoading()
       this.router.navigate([this.router.url.slice(0, -1)+'3']);
+      },
+      (err)=>{
+        // console.log(err)
+
+      this.hideLoading()
+      })
+
+      // this.router.navigate([this.router.url.slice(0, -1)+'3']);
     }
 
     //1. loading 
