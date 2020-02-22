@@ -1,4 +1,8 @@
 /*
+Modified By Log G
+*/
+
+/*
 Jimp v0.6.3
 https://github.com/oliver-moran/jimp
 Ported for the Web by Phil Seaton
@@ -36608,17 +36612,12 @@ function dither(cb) {
 }
 
 
-
+/**
+ * Apply a ordered 3 colors dithering effect with desired output color
+ * @param {function(Error, Jimp)} cb (optional) a callback for when complete
+ * @returns {Jimp} this for chaining of methods
+ */
 function dither3(palette,outputColors,cb) {
-  // options.brightness 
-  // options.contrast 
-  // options.threshhold 
-  // options.tar_width 
-  // options.tar_height
-  // options.whratio
-  
-  console.log(outputColors)
-
   const floydMatrix = [7,3,5,1]
   const floydSteinberg = [
     [1, 0,  7 / 16],
@@ -36635,7 +36634,6 @@ function dither3(palette,outputColors,cb) {
       bitmapclone = this.bitmap.data
     }
     function find_closest_color(old_pixel, the_palette) {
-      // eg [1,2,3] , [[0,0,0],[0xff,0xff,0xff]]
       var errorarray = the_palette.map((pal) => {
         return old_pixel.map((cur, index) => {
           return cur - pal[index]
@@ -36651,24 +36649,13 @@ function dither3(palette,outputColors,cb) {
       const error = errorarray[minerr[1]]
       return { "result": result, "error": error ,"index" :minerr[1]}
     }
-    // if (x==0&&y==0){
-    // bitmapclone[idx] =  bitmapclone[idx]>255?255:bitmapclone[idx]<0?0:bitmapclone[idx]
-    // bitmapclone[idx+1] =  bitmapclone[idx+1]>255?255:bitmapclone[idx+1]<0?0:bitmapclone[idx+1]
-    // bitmapclone[idx+2] =  bitmapclone[idx+2]>255?255:bitmapclone[idx+2]<0?0:bitmapclone[idx+2]
-
     var oldpixel = this.bitmap.data.slice(idx,idx+3)
     var closest = find_closest_color(oldpixel,palette)
     this.bitmap.data[idx] = outputColors[closest.index][0]
     this.bitmap.data[idx + 1] = outputColors[closest.index][1]
     this.bitmap.data[idx + 2] = outputColors[closest.index][2]
-    // bitmapclone[idx] = closest.result[0]
-    // bitmapclone[idx + 1] = closest.result[1]
-    // bitmapclone[idx + 2] = closest.result[2]
     this.bitmap.data[idx + 3] = 255;
     const diff_map = floydSteinberg
-    // console.log(closest.error)
-    //spread error
-    // console.log(idx)
     diff_map.forEach((currentValue,index)=>{
       const xn= x + currentValue[1]
       const yn =  y + currentValue[0]
@@ -36680,14 +36667,10 @@ function dither3(palette,outputColors,cb) {
         this.bitmap.data[neiborindex] = r>255?255:r<0?0:r 
         this.bitmap.data[neiborindex+1] = g>255?255:g<0?0:g
         this.bitmap.data[neiborindex+2] = b>255?255:b<0?0:b 
-        // bitmapclone[neiborindex] = r 
-        // bitmapclone[neiborindex+1] = g
-        // bitmapclone[neiborindex+2] = b 
       }
     })
     if (x == this.bitmap.width - 1 && y == this.bitmap.height - 1) {
-      // image scan finished, do your stuff
-      // this.bitmap.data = bitmapclone
+      // image scan finished
       this.bitmap.data = this.bitmap.data.map((int)=>{
         return (int<64)?0:(int>191)?255:127 
       })
@@ -36695,7 +36678,6 @@ function dither3(palette,outputColors,cb) {
     }
           
   });
-  console.log(this.bitmap.data)
 
   if ((0, _utils.isNodePattern)(cb)) {
     cb.call(this, null, this);
