@@ -118,7 +118,6 @@ export class Tab1Page implements OnInit {
       
       // const palette = [[0xff,0xff,0xff],[0x7f,0x7f,0x7f],[0,0,0]]
       
-      const knitcolors = [[0xff,0xff,0xff],[0x7f,0x7f,0x7f],[0,0,0]]
 
       var step1img = image
       .resize(image.bitmap.width,Math.trunc(image.bitmap.height*this.whratio))
@@ -177,6 +176,7 @@ export class Tab1Page implements OnInit {
       const palette = [this.arrayColors.color1,this.arrayColors.color2,this.arrayColors.color3].map((hex)=>hexToRgb(hex))
       // console.log (palette)
       
+      const knitcolors = [[0xcc,0xc8,0xba],[0x86,0xa0,0xb1],[0x8a,0x58,0x31]]
 
       var ditheredimg = step1img
         .background(backgroundcolor)

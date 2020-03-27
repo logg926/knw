@@ -36617,7 +36617,9 @@ function dither(cb) {
  * @param {function(Error, Jimp)} cb (optional) a callback for when complete
  * @returns {Jimp} this for chaining of methods
  */
-function dither3(palette,outputColors,cb) {
+function dither3(palette,knitcolors,cb) {
+
+  const outputColors = [[0xff,0xff,0xff],[0x7f,0x7f,0x7f],[0x00,0x00,0x00]]
   const floydMatrix = [7,3,5,1]
   const floydSteinberg = [
     [1, 0,  7 / 16],
@@ -36626,6 +36628,7 @@ function dither3(palette,outputColors,cb) {
     [1, 1,  1 / 16]
   ]
   
+  // var test= []
   var bitmapclone
   var rgb565Matrix = [1, 9, 3, 11, 13, 5, 15, 7, 4, 12, 2, 10, 16, 8, 14, 6];
   this.scanQuiet(0, 0, this.bitmap.width, this.bitmap.height, function (x, y, idx) {
@@ -36644,13 +36647,16 @@ function dither3(palette,outputColors,cb) {
           return acc + Math.abs(cur)
         }, 0)
         return (i < accu[0]) ? [i, index] : accu
-      }, [1000000, -1])
+      }, [1000000, 0])
       const result = the_palette[minerr[1]]
       const error = errorarray[minerr[1]]
       return { "result": result, "error": error ,"index" :minerr[1]}
     }
     var oldpixel = this.bitmap.data.slice(idx,idx+3)
     var closest = find_closest_color(oldpixel,palette)
+
+    // test.push(closest.index)
+
     this.bitmap.data[idx] = outputColors[closest.index][0]
     this.bitmap.data[idx + 1] = outputColors[closest.index][1]
     this.bitmap.data[idx + 2] = outputColors[closest.index][2]
@@ -36675,9 +36681,29 @@ function dither3(palette,outputColors,cb) {
         return (int<64)?0:(int>191)?255:127 
       })
 
+      this.bitmap.data = this.bitmap.data.map((cur,ind,arr)=>{
+        if (ind%4==3){
+          return cur
+          // this is equal to 255
+        }else{
+          if (cur == 0){
+            return knitcolors[2][ind%4]
+          }
+          if (cur == 127){
+
+            return knitcolors[1][ind%4]
+          }
+          else{
+            return knitcolors[0][ind%4]
+          }
+        }
+      })
+      //knitcolors
     }
           
   });
+
+  // console.log(test)
 
   if ((0, _utils.isNodePattern)(cb)) {
     cb.call(this, null, this);
