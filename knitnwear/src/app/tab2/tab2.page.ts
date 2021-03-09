@@ -104,7 +104,7 @@ export class Tab2Page implements OnInit{
       // console.log("upload finish")
 
 
-      const endpoint = "http://www.knitnwear.com:2222/";
+      const endpoint = "http://220.241.121.87:2222/";
       // const httpOptions = {
       //   headers: new HttpHeaders({
       //   'Content-Type':  'multipart/form-data'
